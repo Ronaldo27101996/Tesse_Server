@@ -30,6 +30,7 @@ var User = require('./Models/User');
 var Appointment = require('./Models/Appointment');
 var Expert = require('./Models/Expert');
 var Skill = require('./Models/Skill');
+var Search = require('./Models/Search');
 var Career = require('./Models/Career');
 var Expert_Skill = require('./Models/Expert_Skill');
 router.get('/users',function(req,res,next){
@@ -199,6 +200,26 @@ router.get('/appointmentuser/:id',function(req,res,next){
 });
 router.get('/appointmentexpert/:id',function(req,res,next){
         Appointment.getAppointmentExpertById(req.params.id,function(err,rows){
+            if(err){
+                res.json(err);
+            }
+            else{
+                res.json(rows);
+            }
+        });
+});
+router.put('/appointment/commit/:id',function(req,res,next){
+    Appointment.updateCommitAppointment(req.params.id,req.body,function(err,rows){
+        if(err){
+            res.json(err);
+        } else{
+            res.json(rows.affectedRows);
+        }
+    });
+});
+
+router.get('/search/:keyword',function(req,res,next){
+        Search.getExpertbyKeyword(req.params.keyword,function(err,rows){
             if(err){
                 res.json(err);
             }
