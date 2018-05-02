@@ -27,6 +27,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('./Models/User');
+var Appointment = require('./Models/Appointment');
 var Expert = require('./Models/Expert');
 var Skill = require('./Models/Skill');
 var Career = require('./Models/Career');
@@ -62,6 +63,24 @@ router.post('/users/',function(req,res,next){
         } else{
           console.log("body "+ req.body.FName);
             res.json(req.body);
+        }
+    });
+});
+router.put('/users/:id',function(req,res,next){
+    User.updateUserbecomeExpert(req.params.id,req.body,function(err,rows){
+        if(err){
+            res.json(err);
+        } else{
+            res.json(rows.affectedRows);
+        }
+    });
+});
+router.put('/users/update/:id',function(req,res,next){
+    User.updateUserInfo(req.params.id,req.body,function(err,rows){
+        if(err){
+            res.json(err);
+        } else{
+            res.json(rows.affectedRows);
         }
     });
 });
@@ -110,7 +129,15 @@ router.post('/expert/',function(req,res,next){//http://192.168.43.242:3000/tesse
         }
     });
 });
-
+router.put('/expert/update/:id',function(req,res,next){
+    Expert.updateExpertInfo(req.params.id,req.body,function(err,rows){
+        if(err){
+            res.json(err);
+        } else{
+            res.json(rows.affectedRows);
+        }
+    });
+});
 router.get('/career',function(req,res,next){
         Career.getAllCareer(function(err,rows){
             if(err){
@@ -149,5 +176,35 @@ router.post('/expert_skill/',function(req,res,next){//http://192.168.43.242:3000
             res.json(count.affectedRows);
         }
     });
+});
+router.post('/appointment/',function(req,res,next){
+
+    Appointment.addAppointment(req.body,function(err,count){
+        if(err){
+            res.json(err);
+        } else{
+            res.json(count.affectedRows);
+        }
+    });
+});
+router.get('/appointmentuser/:id',function(req,res,next){
+        Appointment.getAppointmentBookingById(req.params.id,function(err,rows){
+            if(err){
+                res.json(err);
+            }
+            else{
+                res.json(rows);
+            }
+        });
+});
+router.get('/appointmentexpert/:id',function(req,res,next){
+        Appointment.getAppointmentExpertById(req.params.id,function(err,rows){
+            if(err){
+                res.json(err);
+            }
+            else{
+                res.json(rows);
+            }
+        });
 });
 module.exports=router;
